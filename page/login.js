@@ -1,4 +1,6 @@
 const { Builder, By, Key, until } = require("selenium-webdriver");
+const env = process.env.NODE_ENV
+const config = require(`../config.${env}.json`)
 
 class LoginPage {
     constructor(driver) {
@@ -6,7 +8,7 @@ class LoginPage {
     }
 
     async open() {
-        await this.driver.get("https://testingmarathon.com/register/index.php");
+        await this.driver.get(config.baseUrl);
         await this.driver.manage().window().setRect({ width: 1920, height: 1080 });
     }
 
@@ -26,6 +28,14 @@ class LoginPage {
 
     async pressLogin() {
         await this.driver.findElement(By.id("field-login-loginSubmit")).click();
+    }
+
+    async login(username, password)
+    {
+        await this.open();
+        await this.enterUserName(username);
+        await this.enterPassword(password);
+        await this.pressLogin();
     }
 }
 
